@@ -1,0 +1,19 @@
+# db VM — /etc/netplan/01-network-manager-all.yaml
+# 인터페이스 이름은 실제 `ip a` 결과에 맞게 수정할 것.
+#
+# 적용:
+#   sudo chmod 600 /etc/netplan/01-network-manager-all.yaml
+#   sudo systemctl enable --now systemd-networkd
+#   sudo netplan apply
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens32:                          # LAN2 (was↔db)
+      dhcp4: no
+      addresses: [192.168.30.30/24]
+    ens35:                          # LAN3 (관리망)
+      dhcp4: no
+      addresses: [192.168.40.30/24]
+    ens36:                          # NAT (인터넷, 임시)
+      dhcp4: yes

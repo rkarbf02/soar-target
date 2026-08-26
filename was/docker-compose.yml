@@ -1,0 +1,23 @@
+# was VM (192.168.20.20) — WAS Tier. DVWA 앱만. DB는 db VM에 있다.
+# WAS 구성: Apache + mod_php (php:8.0-apache). PHP-FPM 아님.
+#
+# 실행: DVWA 소스를 ~/DVWA에 clone 한 뒤 이 파일과 .env를 그 안에 두고 up.
+#   git clone https://github.com/digininja/DVWA.git ~/DVWA
+#   cp docker-compose.yml .env ~/DVWA/
+#   cp config.inc.php.patch ~/DVWA/config/config.inc.php   # 또는 db_* 값 수동 반영
+#   cd ~/DVWA && docker compose up -d
+services:
+  dvwa:
+    image: php:8.0-apache
+    container_name: dvwa-app
+    restart: unless-stopped
+    ports:
+      # web VM(리버스 프록시)만 이 8080으로 들어온다
+      - "192.168.20.20:8080:80"
+    volumes:
+      - ./:/var/www/html          # DVWA 소스 마운트
+    # mysqli + pdo_mysql 설치(둘 다 필요), 업로드/설정 폴더 쓰기권한 부여 후 아파치 기동
+    command: >
+      bash -c "docker-php-ext-install mysqli pdo pdo_mysql &&
+               chmod -R 777 /var/www/html/hackable/uploads /var/www/html/config &&
+               apache2-foreground"

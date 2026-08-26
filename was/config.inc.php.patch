@@ -1,0 +1,19 @@
+DVWA config 수정 안내
+=====================
+
+DVWA를 clone 한 뒤:
+  cp ~/DVWA/config/config.inc.php.dist ~/DVWA/config/config.inc.php
+
+그리고 config.inc.php에서 아래 DB 항목을 다음과 같이 바꾼다.
+(핵심은 db_server를 db VM의 LAN2 IP로 지정하는 것. 127.0.0.1 아님)
+
+    $_DVWA[ 'db_server' ]   = '192.168.30.30';   // db VM (LAN2)
+    $_DVWA[ 'db_database' ] = 'dvwa';
+    $_DVWA[ 'db_user' ]     = 'dvwa';
+    $_DVWA[ 'db_password' ] = 'dvwapass';
+    $_DVWA[ 'db_port' ]     = '3306';
+
+주의:
+- 위 dvwa/dvwapass 값은 .env(MYSQL_USER/MYSQL_PASSWORD)와 반드시 일치해야 한다.
+- 비밀번호를 .env로 관리하지만 DVWA config는 PHP 파일이라 값을 직접 써야 한다.
+  팀 공유 시 이 파일도 프라이빗 저장소 전제로만 실제 값을 둔다.

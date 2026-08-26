@@ -1,0 +1,22 @@
+# db VM (192.168.30.30) — DB Tier
+# 실행: cp ../.env.example .env  후  docker compose up -d
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: dvwa-db
+    restart: unless-stopped
+    ports:
+      # LAN2 IP에만 3306을 노출. 0.0.0.0 금지 (관리망에도 열리면 원칙 위반)
+      - "${DB_HOST}:${DB_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    # MySQL 8 기본 인증(caching_sha2_password)은 구형 PHP mysqli가 못 붙으므로 native로 고정
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - dvwa-db-data:/var/lib/mysql
+
+volumes:
+  dvwa-db-data:

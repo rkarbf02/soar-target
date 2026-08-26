@@ -1,0 +1,14 @@
+# 실제 비밀번호가 담긴 환경 파일 (커밋 금지)
+.env
+
+# DVWA 소스는 원본 저장소에서 clone (재배포 아님)
+DVWA/
+
+# 공격 로그
+*.jsonl
+
+# 커서·임시 파일
+.last_polled_at
+*.bak
+*.pyc
+__pycache__/
